@@ -20,6 +20,7 @@ class kNN
     }
     kNN<T>(vector<vector<T>>  inputdata);
     vector<vector<T>>  get_K_nearest(vector<T> aimdata,int k);
+    T  get_class(vector<T> aimdata);
     vector<double> distance;    
     int maxidx;
     double max=0;
@@ -38,6 +39,28 @@ kNN<T>::kNN()
         //cout<<data[0][0]<<endl;
       
  }
+  template <typename T> 
+T kNN<T>::get_class(vector<T> aimdata)   
+{
+    int k=11;
+        vector<vector<T>>  k_near = get_K_nearest(aimdata,k);
+        int class_true=0,class_fasle=0;
+        for(int i =0;i<k_near.size();i++)
+        {
+            if(k_near[i][2]>0)
+            {
+                    class_true++;
+                    if(class_true>k/2)
+                        return k_near[i][2];
+            }
+            else
+            {
+                class_fasle++;
+                  if(class_fasle>k/2)
+                        return k_near[i][2];
+            }
+        }
+}
  template <typename T> 
 kNN<T>::kNN(vector<vector<T>>  inputdata)   
 {
@@ -56,7 +79,7 @@ vector<vector<T>>  kNN<T>::get_K_nearest(vector<T> aimdata,int k)
       //vector<double>  distance(10,0);
       max=0;
       k_nearest_dat.clear();
-      cout<<k_nearest_dat.size()<<"ad a"<<endl;
+      
     for(int i=0;i<k;i++)
     {
         distance.push_back(0);       
@@ -94,19 +117,20 @@ vector<vector<T>>  kNN<T>::get_K_nearest(vector<T> aimdata,int k)
  //   cout<<"qaz"<<endl;
 
 
-               for(int i=0;i<k_nearest_dat.size();i++)
+               /*for(int i=0;i<k_nearest_dat.size();i++)
             {
                 for(int j=0;j<k_nearest_dat[i].size()-1;j++)
                     storefile1<<k_nearest_dat[i][j]<<"  ";
                 storefile1<<endl;
-            }
+            }*/
+            /*
 	for(int i=0;i<k_nearest_dat.size();i++)
 	{
 		//	cout<<"123";
 		for(int j=0;j<k_nearest_dat[i].size();j++)
 			cout<<k_nearest_dat[i][j];
 		cout<<endl;
-	}
+	}*/
   
     return k_nearest_dat;
     

@@ -35,7 +35,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = kNN1.0.0
-DISTDIR = /home/wxwx/CppStudy/kNN/.tmp/kNN1.0.0
+DISTDIR = /home/wxwx/MLbyCpp/kNN/.tmp/kNN1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/wxwx/Qt5.11.2/5.11.2/gcc_64/lib
 LIBS          = $(SUBLIBS) -L/home/wxwx/Qt5.11.2/5.11.2/gcc_64/lib -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -50,11 +50,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = doublemood.cpp \
+SOURCES       = dis.cpp \
+		doublemood.cpp \
 		kNN.cpp \
 		main.cpp \
 		MLP.cpp 
-OBJECTS       = doublemood.o \
+OBJECTS       = dis.o \
+		doublemood.o \
 		kNN.o \
 		main.o \
 		MLP.o
@@ -245,9 +247,11 @@ DIST          = ../../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/exceptions.prf \
 		../../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/lex.prf \
-		kNN.pro doublemood.h \
+		kNN.pro dis.h \
+		doublemood.h \
 		kNN.h \
-		MLP.h doublemood.cpp \
+		MLP.h dis.cpp \
+		doublemood.cpp \
 		kNN.cpp \
 		main.cpp \
 		MLP.cpp
@@ -658,8 +662,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt5.11.2/5.11.2/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents doublemood.h kNN.h MLP.h $(DISTDIR)/
-	$(COPY_FILE) --parents doublemood.cpp kNN.cpp main.cpp MLP.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents dis.h doublemood.h kNN.h MLP.h $(DISTDIR)/
+	$(COPY_FILE) --parents dis.cpp doublemood.cpp kNN.cpp main.cpp MLP.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -706,6 +710,9 @@ compiler_lex_clean:
 compiler_clean: compiler_moc_predefs_clean 
 
 ####### Compile
+
+dis.o: dis.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dis.o dis.cpp
 
 doublemood.o: doublemood.cpp doublemood.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o doublemood.o doublemood.cpp
