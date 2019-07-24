@@ -5,26 +5,91 @@
 #include <kNN.h>
 #include <fstream>
 #include <sstream>   
+#include <dirent.h>  
 using namespace std;
 const std::string strCfgName = "logger_import_db.conf" ;   
 void getData(string filename1,string filename2,vector<vector<double>>  &dat);
 void generate_decision_board(double x1,double x2,double y1,double y2, string txtname,kNN<double> &knn);
+void 	get_trainDate(string dirpt,vector<vector<unsigned char>>  &imgtraindat );
 int main(void)
 {
 	DoubleMoon dbmood(2000,4,10,10,6,3.1415*0,"moon1.txt","moon2.txt");
 	DoubleMoon tstdbmood(20,6,10,10,6,3.1415*0,"tstmoon1.txt","tstmoon2.txt");
 	vector<vector<double>>  traindat ;
 	vector<vector<double>>  tstdat ;
- 
-	getData(dbmood.filename1,dbmood.filename2,traindat);
+  vector<vector<unsigned char>>  imgtraindat ;
+	vector<vector<unsigned char>>  imgtstdat ;
+	/*getData(dbmood.filename1,dbmood.filename2,traindat);
 	getData(tstdbmood.filename1,tstdbmood.filename2,tstdat);
+	
+	get_trainDate(imgtraindat );
+	kNN<unsigned char>  knn1(imgtraindat);
 		kNN<double>  knn(traindat);
 //	for(int i=0;i<tstdat.size();i++)
 //	 	cout<<knn.get_class(tstdat[i])<<endl;
 	 //	knn.get_K_nearest(tstdat[0],10);
-generate_decision_board(-20,20,-15,15,"board.txt",knn);
+generate_decision_board(-20,20,-15,15,"board.txt",knn);*/
 	//cout<<tstdat[0][0]<<" "<<tstdat[0][1]<<endl;
+get_trainDate("/home/wxwx/MLbyCpp/kNN/digits/trainingDigits",imgtraindat);
+ get_trainDate("/home/wxwx/MLbyCpp/kNN/digits/testDigits",imgtstdat);
 
+ int total=0;
+  kNN<unsigned char>  knn1(imgtraindat);
+ for(int i=0;i<imgtstdat.size();i++)
+  {cout<<knn1.get_class(imgtstdat[i])<<": "<<imgtstdat[i][imgtstdat[i].size()-1]<<endl;
+	if(knn1.get_class(imgtstdat[i])!=imgtstdat[i][imgtstdat[i].size()-1])
+	{
+		total++;
+	}
+	}
+	cout<<"error total"<<total<<endl;
+}
+void 	get_trainDate(string dirpt,vector<vector<unsigned char>>  &imgtraindat )
+{
+	struct dirent *ptr;      
+    DIR *dir;  
+    string PATH = dirpt;  
+    dir=opendir(PATH.c_str());   
+    vector<string> files;  
+    cout << "文件列表: "<< endl;  
+    while((ptr=readdir(dir))!=NULL)  
+    {  
+   
+        //跳过'.'和'..'两个目录  
+        if(ptr->d_name[0] == '.')  
+            continue;  
+        //cout << ptr->d_name << endl;  
+        files.push_back(ptr->d_name);  
+    }  
+      /*
+    for (int i = 0; i < files.size(); ++i)  
+    {  
+        cout << files[i] << endl;  
+    }  */
+  
+    
+	  string tmp;
+		vector<unsigned char>  hang;
+		 for (int k = 0; k < files.size(); ++k)  
+    {  
+			   hang.clear();
+				string namefile="/home/wxwx/MLbyCpp/kNN/digits/trainingDigits/"+files[k];
+				ifstream storefile(namefile);
+				for (int i=0;i<32;i++)
+				{	
+					getline(storefile,tmp);
+				//	cout<<tmp<<endl;
+					for(int j=0;j<32;j++)
+					{				
+							hang.push_back((tmp[j]));				
+					}
+				}
+				hang.push_back(files[k][0]);
+				imgtraindat.push_back(hang);
+		}
+		closedir(dir);  
+		cout<<imgtraindat.size()<<endl;
+		cout<<imgtraindat[0].size()<<endl;
 }
 
 void generate_decision_board(double x1,double x2,double y1,double y2, string txtname,kNN<double> &knn)

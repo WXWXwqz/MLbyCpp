@@ -24,7 +24,7 @@ class kNN
     vector<double> distance;    
     int maxidx;
     double max=0;
-    int  get_Max( vector<T> data_in);
+    int  get_Max( vector<double> data_in);
     private:
     double discal(vector<T> p1,vector<T> p2);
     char tmp[100];
@@ -42,22 +42,22 @@ kNN<T>::kNN()
   template <typename T> 
 T kNN<T>::get_class(vector<T> aimdata)   
 {
-    int k=11;
+    int k=7;
         vector<vector<T>>  k_near = get_K_nearest(aimdata,k);
         int class_true=0,class_fasle=0;
         for(int i =0;i<k_near.size();i++)
         {
-            if(k_near[i][2]>0)
+            if(k_near[i][k_near[i].size()-1]>0)
             {
                     class_true++;
                     if(class_true>k/2)
-                        return k_near[i][2];
+                        return k_near[i][k_near[i].size()-1];
             }
             else
             {
                 class_fasle++;
                   if(class_fasle>k/2)
-                        return k_near[i][2];
+                        return k_near[i][k_near[i].size()-1];
             }
         }
 }
@@ -146,7 +146,7 @@ double kNN<T>::discal(vector<T> p1,vector<T> p2)
     return tmp;
 }  
 template <typename T>
-int kNN<T>::get_Max(vector <T> data_in)
+int kNN<T>::get_Max(vector <double> data_in)
 {
         double tmp=0;
         int num;
