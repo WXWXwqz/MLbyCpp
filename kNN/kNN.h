@@ -79,7 +79,7 @@ vector<vector<T>>  kNN<T>::get_K_nearest(vector<T> aimdata,int k)
       //vector<double>  distance(10,0);
       max=0;
       k_nearest_dat.clear();
-      
+      distance.clear();
     for(int i=0;i<k;i++)
     {
         distance.push_back(0);       

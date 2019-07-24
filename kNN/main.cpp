@@ -43,7 +43,7 @@ void generate_decision_board(double x1,double x2,double y1,double y2, string txt
 		xy.push_back(y1);
 		xy.push_back(0);
 		double last_class;
-		for(double i=x1;i<x2;i+=0.1)
+		for(double i=x1;i<x2;i+=0.01)
 		{
 			boardxy.clear();
 			xy[0]=i;
